@@ -16,12 +16,17 @@ query = {
 
 r = requests.get(BASE_URL, params=query)
 r.raise_for_status()
-data = r.json()
-for key, value in data.items():
-    print(key, ':', value)
+data = r.json()["Time Series (Daily)"]
 
-def get_news(data):
-    pass
+data_list = [value for (key, value) in data.items()]
+yesterday_close = float(data_list[0]['4. close'])
+yesterday_2x_close = float(data_list[1]['4. close'])
+
+difference = abs(yesterday_close - yesterday_2x_close)
+percent_diff = (difference / yesterday_close) * 100
+
+if percent_diff >= 5:
+    print("Get News")
 
 
 ## STEP 2: Use https://newsapi.org
